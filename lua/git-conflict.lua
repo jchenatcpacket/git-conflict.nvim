@@ -26,11 +26,6 @@ local job = utils.job
 
 ---@alias ConflictSide "'ours'"|"'theirs'"|"'both'"|"'base'"|"'none'"
 
---- @class ConflictHighlights
---- @field current string
---- @field incoming string
---- @field ancestor string?
-
 ---@class RangeMark
 ---@field label integer
 ---@field content string
@@ -71,7 +66,6 @@ local job = utils.job
 --- @field default_commands boolean
 --- @field disable_diagnostics boolean
 --- @field list_opener string|function
---- @field highlights ConflictHighlights
 --- @field debug boolean
 
 --- @class GitConflictUserConfig
@@ -79,7 +73,6 @@ local job = utils.job
 --- @field default_commands? boolean
 --- @field disable_diagnostics? boolean
 --- @field list_opener? string|function
---- @field highlights? ConflictHighlights
 --- @field debug? boolean
 
 -----------------------------------------------------------------------------//
@@ -145,11 +138,6 @@ local config = {
   default_commands = true,
   disable_diagnostics = false,
   list_opener = 'copen',
-  highlights = {
-    current = 'DiffText',
-    incoming = 'DiffAdd',
-    ancestor = nil,
-  },
 }
 
 --- @return table<string, ConflictBufferCache>
@@ -582,17 +570,13 @@ end
 -----------------------------------------------------------------------------//
 
 ---Derive the colour of the section label highlights based on each sections highlights
----@param highlights ConflictHighlights
-local function set_highlights(highlights)
-  local current_color = utils.get_hl(highlights.current)
-  local incoming_color = utils.get_hl(highlights.incoming)
-  local ancestor_color = utils.get_hl(highlights.ancestor)
-  local current_bg = current_color.background or DEFAULT_CURRENT_BG_COLOR
-  local incoming_bg = incoming_color.background or DEFAULT_INCOMING_BG_COLOR
-  local ancestor_bg = ancestor_color.background or DEFAULT_ANCESTOR_BG_COLOR
-  local current_fg = current_color.foreground or DEFAULT_CURRENT_FG_COLOR
-  local incoming_fg = incoming_color.foreground or DEFAULT_INCOMING_FG_COLOR
-  local ancestor_fg = ancestor_color.foreground or DEFAULT_ANCESTOR_FG_COLOR
+local function set_highlights()
+  local current_bg = DEFAULT_CURRENT_BG_COLOR
+  local incoming_bg = DEFAULT_INCOMING_BG_COLOR
+  local ancestor_bg = DEFAULT_ANCESTOR_BG_COLOR
+  local current_fg = DEFAULT_CURRENT_FG_COLOR
+  local incoming_fg = DEFAULT_INCOMING_FG_COLOR
+  local ancestor_fg = DEFAULT_ANCESTOR_FG_COLOR
   local current_label_bg = color.shade_color(current_bg, 60)
   local incoming_label_bg = color.shade_color(incoming_bg, 60)
   local ancestor_label_bg = color.shade_color(ancestor_bg, 60)
@@ -620,7 +604,7 @@ function M.setup(user_config)
 
   config = vim.tbl_deep_extend('force', config, _user_config)
 
-  set_highlights(config.highlights)
+  set_highlights()
 
   if config.default_commands then set_commands() end
 
@@ -629,7 +613,7 @@ function M.setup(user_config)
   api.nvim_create_augroup(AUGROUP_NAME, { clear = true })
   api.nvim_create_autocmd('ColorScheme', {
     group = AUGROUP_NAME,
-    callback = function() set_highlights(config.highlights) end,
+    callback = function() set_highlights() end,
   })
 
   api.nvim_create_autocmd({ 'VimEnter', 'BufRead', 'SessionLoadPost', 'DirChanged' }, {
