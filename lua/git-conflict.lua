@@ -120,9 +120,9 @@ local conflict_middle = '^======='
 local conflict_end = '^>>>>>>>'
 local conflict_ancestor = '^|||||||'
 
-local DEFAULT_CURRENT_BG_COLOR = 4218238  -- #405d7e
-local DEFAULT_INCOMING_BG_COLOR = 3229523 -- #314753
-local DEFAULT_ANCESTOR_BG_COLOR = 6824314 -- #68217A
+local DEFAULT_CURRENT_BG_COLOR = 3500614   -- #356a46
+local DEFAULT_INCOMING_BG_COLOR = 484984   -- #076678
+local DEFAULT_ANCESTOR_BG_COLOR = 11892244 -- #b57614
 -----------------------------------------------------------------------------//
 
 --- @type GitConflictMappings
