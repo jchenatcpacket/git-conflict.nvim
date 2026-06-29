@@ -120,9 +120,12 @@ local conflict_middle = '^======='
 local conflict_end = '^>>>>>>>'
 local conflict_ancestor = '^|||||||'
 
-local DEFAULT_CURRENT_BG_COLOR = 3500614   -- #356a46
-local DEFAULT_INCOMING_BG_COLOR = 484984   -- #076678
-local DEFAULT_ANCESTOR_BG_COLOR = 11892244 -- #b57614
+local DEFAULT_CURRENT_BG_COLOR = 3500614    -- #356a46 dark_aqua
+local DEFAULT_INCOMING_BG_COLOR = 484984    -- #076678 dark_blue
+local DEFAULT_ANCESTOR_BG_COLOR = 11892244  -- #b57614 dark_yellow
+local DEFAULT_CURRENT_FG_COLOR = 6856042    -- #689d6a neutral_aqua
+local DEFAULT_INCOMING_FG_COLOR = 4556168   -- #458588 neutral_blue
+local DEFAULT_ANCESTOR_FG_COLOR = 14129441  -- #d79921 neutral_yellow
 -----------------------------------------------------------------------------//
 
 --- @type GitConflictMappings
@@ -587,12 +590,15 @@ local function set_highlights(highlights)
   local current_bg = current_color.background or DEFAULT_CURRENT_BG_COLOR
   local incoming_bg = incoming_color.background or DEFAULT_INCOMING_BG_COLOR
   local ancestor_bg = ancestor_color.background or DEFAULT_ANCESTOR_BG_COLOR
+  local current_fg = current_color.foreground or DEFAULT_CURRENT_FG_COLOR
+  local incoming_fg = incoming_color.foreground or DEFAULT_INCOMING_FG_COLOR
+  local ancestor_fg = ancestor_color.foreground or DEFAULT_ANCESTOR_FG_COLOR
   local current_label_bg = color.shade_color(current_bg, 60)
   local incoming_label_bg = color.shade_color(incoming_bg, 60)
   local ancestor_label_bg = color.shade_color(ancestor_bg, 60)
-  api.nvim_set_hl(0, CURRENT_HL, { background = current_bg, bold = true, default = true })
-  api.nvim_set_hl(0, INCOMING_HL, { background = incoming_bg, bold = true, default = true })
-  api.nvim_set_hl(0, ANCESTOR_HL, { background = ancestor_bg, bold = true, default = true })
+  api.nvim_set_hl(0, CURRENT_HL, { background = current_bg, fg = current_fg, bold = true, default = true })
+  api.nvim_set_hl(0, INCOMING_HL, { background = incoming_bg, fg = incoming_fg, bold = true, default = true })
+  api.nvim_set_hl(0, ANCESTOR_HL, { background = ancestor_bg, fg = ancestor_fg, bold = true, default = true })
   api.nvim_set_hl(0, CURRENT_LABEL_HL, { background = current_label_bg, default = true })
   api.nvim_set_hl(0, INCOMING_LABEL_HL, { background = incoming_label_bg, default = true })
   api.nvim_set_hl(0, ANCESTOR_LABEL_HL, { background = ancestor_label_bg, default = true })
